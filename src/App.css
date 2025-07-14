@@ -33,8 +33,14 @@
     align-items: center;
     justify-content: center;
 
+}
+
+.purple {
     box-shadow: 2px 2px 15px violet, -2px -2px 15px blue;
-    /*box-shadow: 2px 2px 5px #eec882, -2px -2px 5px #e34d02;*/
+}
+
+.yellow {
+    box-shadow: 2px 2px 5px #eec882, -2px -2px 5px #e34d02;
 }
 
 .card-label {
@@ -80,5 +86,3 @@
         font-size: 5rem;
     }
 }
-
-

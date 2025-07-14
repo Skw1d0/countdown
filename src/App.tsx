@@ -1,6 +1,7 @@
 import "./App.css";
 import {useEffect, useState} from "react";
 import dayjs, {Dayjs} from "dayjs";
+import Digit from "./components/Digit.tsx";
 
 function App() {
     const [to, setTo] = useState<Dayjs | null>(null);
@@ -9,6 +10,8 @@ function App() {
     const [days, setDays] = useState(0);
     const [hours, setHours] = useState(0);
     const [minutes, setMinutes] = useState(0);
+    const [glowEffect, setGlowEffect] = useState<"none" | "purple" | "yellow">("none");
+
 
     const getDifferenceString = (
         from: Dayjs | null,
@@ -64,14 +67,23 @@ function App() {
 
     const handleChangeTo = (value: string) => {
         const newTo = value === "" ? null : dayjs(value);
-
-        // if (!newTo.isAfter(dayjs())) {
-        //     alert("Datumswert muss nach dem heutigem Datum sein.");
-        //     return;
-        // }
-
         setTo(newTo);
     };
+
+    const handleChangeGlowEffect = (value: string) => {
+        if (value === "none") {
+            setGlowEffect("none");
+            return;
+        } else if (value === "purple") {
+            setGlowEffect("purple");
+            return;
+        } else if (value === "yellow") {
+            setGlowEffect("yellow");
+            return;
+        }
+
+        setGlowEffect("none");
+    }
 
     useEffect(() => {
         setNewTimerVariables();
@@ -87,36 +99,33 @@ function App() {
 
     return (
         <>
-            <input
-                style={{maxWidth: "150px"}}
-                type="date"
-                onChange={(e) => handleChangeTo(e.target.value)}
-                value={!to ? "" : to.format("YYYY-MM-DD")}
-            />
+            {to && (
+                <title>{`${years}y ${months}m ${days}d ${hours}h ${minutes}m`}</title>
+            )}
+            <div style={{display: "flex", flexDirection: "row", gap: "10px"}}>
+                <input
+                    style={{maxWidth: "150px"}}
+                    type="date"
+                    onChange={(e) => handleChangeTo(e.target.value)}
+                    value={!to ? "" : to.format("YYYY-MM-DD")}
+                />
+                <select name="glow" value={glowEffect}
+                        onChange={(e) => handleChangeGlowEffect(e.target.value)}
+                        style={{width: "150px"}}>
+                    <option value="none">kein Effect</option>
+                    <option value="purple">violett</option>
+                    <option value="yellow">orange</option>
+                </select>
+            </div>
             <div className="timer-container">
                 <div className="card-container">
-                    <p className="card">
-                        <span className="card-label">Jahre</span>
-                        {years}
-                    </p>
-                    <p className="card">
-                        <span className="card-label">Monate</span>
-                        {months}
-                    </p>
-                    <p className="card" style={{marginRight: "10px"}}>
-                        <span className="card-label">Tage</span>
-                        {days}
-                    </p>
+                    <Digit value={years} label={"Jahre"} glowEffect={glowEffect}/>
+                    <Digit value={months} label={"Monate"} glowEffect={glowEffect}/>
+                    <Digit value={days} label={"Tage"} glowEffect={glowEffect}/>
                 </div>
                 <div className="card-container">
-                    <p className="card">
-                        <span className="card-label">Stunden</span>
-                        {hours}
-                    </p>
-                    <p className="card">
-                        <span className="card-label">Minuten</span>
-                        {minutes}
-                    </p>
+                    <Digit value={hours} label={"Stunden"} glowEffect={glowEffect}/>
+                    <Digit value={minutes} label={"Minuten"} glowEffect={glowEffect}/>
                 </div>
             </div>
         </>
